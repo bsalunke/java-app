@@ -21,22 +21,27 @@ jobs:
           copilot --version || echo "Copilot CLI installed"
 
       - name: Authenticate with GitHub token
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+          echo "$GITHUB_TOKEN" | gh auth login --with-token
+          gh auth status
 
       - name: Run Copilot CLI with fixed prompt
         id: copilot
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           PROMPT='Explain the architecture of this codebase'
           echo "Prompt: $PROMPT"
           OUTFILE=copilot-output.txt
           # Use the correct Copilot CLI command with -p flag
+          # Copilot CLI will pick up GH_TOKEN or GITHUB_TOKEN from environment
           copilot -p "$PROMPT" 2>&1 | tee "$OUTFILE" || true
 
-      # - name: Upload Copilot output
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: copilot-output
-      #     path: copilot-output.txt
+      - name: Upload Copilot output
+        uses: actions/upload-artifact@v4
+        with:
+          name: copilot-output
+          path: copilot-output.txt
