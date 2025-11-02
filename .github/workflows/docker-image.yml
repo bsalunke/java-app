@@ -20,16 +20,16 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build image (load into local Docker)
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          file: ./Dockerfile
-          push: false
-          load: true
-          tags: |
-            bsalunke/java-app:latest
-            bsalunke/java-app:${{ github.sha }}
+      # - name: Build image (load into local Docker)
+      #   uses: docker/build-push-action@v4
+      #   with:
+      #     context: .
+      #     file: ./Dockerfile
+      #     push: false
+      #     load: true
+      #     tags: |
+      #       bsalunke/java-app:latest
+      #       bsalunke/java-app:${{ github.sha }}
 
       # - name: Run Trivy scan and print results
       #   # run Trivy from its container against the locally-loaded image; do not fail the job on vulnerabilities
@@ -39,7 +39,13 @@ jobs:
       - name: Set up Node.js (for Gemini CLI)
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20.18.1'
+          cache: 'npm'
+
+      - name: Print Node & npm versions
+        run: |
+          node --version
+          npm --version
 
       - name: Install Gemini CLI
         run: |
