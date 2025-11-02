@@ -17,8 +17,8 @@ jobs:
 
       - name: Install GitHub Copilot CLI (gh extension)
         run: |
-          # install copilot CLI as a gh extension (id: github/copilot-cli)
-          gh extension install github/copilot-cli || true
+          # install copilot CLI as a gh extension (correct id: github/gh-copilot)
+          gh extension install github/gh-copilot || true
           # show installed extensions for debugging
           gh extension list || true
 
@@ -27,16 +27,9 @@ jobs:
         run: |
           PROMPT='Explain the architecture of this codebase'
           echo "Prompt: $PROMPT"
-          # Try common invocation forms; write output to file
+          # Use gh copilot explain with -t for the prompt text; write output to file
           OUTFILE=copilot-output.txt
-          set -o pipefail
-          (
-            gh copilot chat --prompt "$PROMPT" 2>&1 ||
-            gh extension run github/copilot-cli chat --prompt "$PROMPT" 2>&1 ||
-            gh extension run github/copilot-cli query "$PROMPT" 2>&1 ||
-            copilot chat --prompt "$PROMPT" 2>&1
-          ) | tee "$OUTFILE"
-          echo "::set-output name=out::$OUTFILE"
+          gh copilot explain -t "$PROMPT" 2>&1 | tee "$OUTFILE"
 
       # - name: Upload Copilot output
       #   uses: actions/upload-artifact@v4
