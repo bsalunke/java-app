@@ -27,9 +27,9 @@ jobs:
         run: |
           PROMPT='Explain the architecture of this codebase'
           echo "Prompt: $PROMPT"
-          # Use gh copilot explain with -t for the prompt text; write output to file
+          # Pass prompt as argument or via echo/pipe
           OUTFILE=copilot-output.txt
-          gh copilot explain -t "$PROMPT" 2>&1 | tee "$OUTFILE"
+          echo "$PROMPT" | gh copilot explain 2>&1 | tee "$OUTFILE"
 
       # - name: Upload Copilot output
       #   uses: actions/upload-artifact@v4
