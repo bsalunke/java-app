@@ -1,12 +1,7 @@
 name: Build, scan and publish Docker image
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-  on_workflow_dispatch:
-    workflow_dispatch: {}
+  workflow_dispatch: {}
 
 jobs:
   build-and-scan:
