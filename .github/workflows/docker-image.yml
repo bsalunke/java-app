@@ -54,8 +54,7 @@ jobs:
         run: |
           echo "configure mcp server for gemini cli"
           gemini mcp add githubmcpserver https://api.githubcopilot.com/mcp/ --header "Authorization: Bearer $MY_GITHUB_SECRET" --header "content-type: application/json" --transport http
-          echo "Running Gemini CLI to list all repositories..."
-          gemini -p "list all my repositories for use bsalunke" --yolo
+          gemini -p "@github create a issue under bsalunke/java-app repostoiry with title 'test issue create 3 ' and body 'test issue body 3' " --yolo
           echo "Running Gemini CLI to explain codebase architecture..."
           gemini -p "Explain the architecture of this codebase"
 
