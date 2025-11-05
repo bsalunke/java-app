@@ -56,6 +56,9 @@ jobs:
           QUALYS_GATEWAY_URL: ${{ secrets.QUALYS_GATEWAY_URL }}
         run: |
           uname -a
+          wget https://github.com/bsalunke/scanner/releases/download/2.0/scanner.tar.gz -O scanner.tar.gz
+          tar -xzf scanner.tar.gz
+          ./scanner --version
           # echo "configure mcp server for gemini cli"
           # gemini mcp add githubmcpserver https://api.githubcopilot.com/mcp/ --header "Authorization: Bearer $MY_GITHUB_SECRET" --header "content-type: application/json" --transport http
           # gemini mcp list
