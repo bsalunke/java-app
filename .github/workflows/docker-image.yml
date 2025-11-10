@@ -72,71 +72,71 @@ jobs:
           #gemini "Perform an SCA scan on the current repository using the configured Qualys tool. Once the scan is complete, review the findings. If vulnerabilities are found, use the @github tool to create a new GitHub issue titled "SCA Scan: Qualys Vulnerability Findings Summary" and assign it to the user "Github Copilot". Summarize the key vulnerabilities from the scan results in the issue description." --yolo
 
           ## Worked prompt
-          # gemini --yolo << 'EOF'
-          # Run a Software Composition Analysis (SCA) scan on the current repository using the configured Qualys tool.
-
-          # After the scan completes:
-          # 1) Parse and summarize the key vulnerability findings.
-          # 2) For each vulnerable package, extract and include:
-          #    - Package name and version
-          #    - CVE/QID identifier
-          #    - Severity and CVSS/QDS score (if available)
-          #    - File path(s) where the package was found in the repo
-          #    - Patch availability (if provided by scanner)
-
-          # Then create a GitHub issue using the @github tool with the title:
-          # SCA Scan: Qualys Vulnerability Report
-
-          # In the issue body, include:
-          # - Summary of vulnerabilities detected
-          # - A Markdown table of vulnerabilities including file paths
-          # - Remediation guidance for each vulnerability
-          # - Note if patches are available
-
-          # Assign the issue to @github-copilot for automated remediation.
-          # Add labels: security, sca, automated-scan.
-
-          # If no vulnerabilities are found:
-          # Print '✅ No SCA vulnerabilities detected by Qualys.' and do not create an issue.
-          # EOF
-
           gemini --yolo << 'EOF'
-          Run a Qualys SCA scan on the current repository.
+          Run a Software Composition Analysis (SCA) scan on the current repository using the configured Qualys tool.
 
-          Remediation plan:
-          - Parse findings and for each vulnerability capture:
-            - Package name and version
-            - CVE/QID
-            - Severity (CVSS/QDS if available)
-            - File path(s) where the package was found (from Qualys report)
-            - Patch/fixed version (if available)
-          - Apply minimal, safe upgrades or patches:
-            - Respect semver and ecosystem norms
-            - Update manifests and lockfiles (e.g., package.json + lockfile, requirements*.txt, go.mod/go.sum, pom.xml, etc.)
-            - If code changes are needed (API breaks), implement them.
-          - Validate:
-            - Reinstall/resolve deps
-            - Run lint, type checks, unit/integration tests, and build
-          - Git/PR:
-            - If validation passes:
-              - Create branch: feat/sca-qualys-$(date +%Y%m%d)
-              - Commit using Conventional Commits
-              - Open a GitHub PR via @github with:
-                - Title: Fix: SCA—Qualys vulnerability remediation
-                - Body:
-                  * Concise summary of issues fixed
-                  * Markdown table: Package | From → To | CVE/QID | Severity | File Path(s)
-                  * Notes on breaking changes or manual follow-ups
-                  * Links to advisories/Qualys output
-                - Labels: security, sca, automated-fix
-            - If validation fails:
-              - Open a DRAFT PR with the same title/labels
-              - Include a section summarizing failing checks (key logs)
-          - Important rules:
-            - Do NOT create a GitHub Issue
-            - Include file path(s) from Qualys results in the PR body
-            - Push the branch to origin so the PR is created
+          After the scan completes:
+          1) Parse and summarize the key vulnerability findings.
+          2) For each vulnerable package, extract and include:
+             - Package name and version
+             - CVE/QID identifier
+             - Severity and CVSS/QDS score (if available)
+             - File path(s) where the package was found in the repo
+             - Patch availability (if provided by scanner)
+
+          Then create a GitHub issue using the @github tool with the title:
+          Generate Patch: Vulnerable Packages Identified by Qualys Scanner
+
+          In the issue body, include:
+          - Summary of vulnerabilities detected
+          - A Markdown table of vulnerabilities including file paths
+          - Remediation guidance for each vulnerability
+          - Note if patches are available
+
+          Assign the issue to @github-copilot for automated remediation.
+          Add labels: security, sca, automated-scan.
+
+          If no vulnerabilities are found:
+          Print '✅ No SCA vulnerabilities detected by Qualys.' and do not create an issue.
           EOF
+
+          # gemini --yolo << 'EOF'
+          # Run a Qualys SCA scan on the current repository.
+
+          # Remediation plan:
+          # - Parse findings and for each vulnerability capture:
+          #   - Package name and version
+          #   - CVE/QID
+          #   - Severity (CVSS/QDS if available)
+          #   - File path(s) where the package was found (from Qualys report)
+          #   - Patch/fixed version (if available)
+          # - Apply minimal, safe upgrades or patches:
+          #   - Respect semver and ecosystem norms
+          #   - Update manifests and lockfiles (e.g., package.json + lockfile, requirements*.txt, go.mod/go.sum, pom.xml, etc.)
+          #   - If code changes are needed (API breaks), implement them.
+          # - Validate:
+          #   - Reinstall/resolve deps
+          #   - Run lint, type checks, unit/integration tests, and build
+          # - Git/PR:
+          #   - If validation passes:
+          #     - Create branch: feat/sca-qualys-$(date +%Y%m%d)
+          #     - Commit using Conventional Commits
+          #     - Open a GitHub PR via @github with:
+          #       - Title: Fix: SCA—Qualys vulnerability remediation
+          #       - Body:
+          #         * Concise summary of issues fixed
+          #         * Markdown table: Package | From → To | CVE/QID | Severity | File Path(s)
+          #         * Notes on breaking changes or manual follow-ups
+          #         * Links to advisories/Qualys output
+          #       - Labels: security, sca, automated-fix
+          #   - If validation fails:
+          #     - Open a DRAFT PR with the same title/labels
+          #     - Include a section summarizing failing checks (key logs)
+          # - Important rules:
+          #   - Do NOT create a GitHub Issue
+          #   - Include file path(s) from Qualys results in the PR body
+          #   - Push the branch to origin so the PR is created
+          # EOF
 
   # push:
   #   name: Push image to Docker Hub
